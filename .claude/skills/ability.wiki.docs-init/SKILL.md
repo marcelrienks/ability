@@ -11,10 +11,10 @@ One-time setup to discover, organize, and index all documentation in a project. 
 
 ## I/O exception
 
-Declared `io: external` (default rule is `meta/` in, `<repo root>/<skill-name>/` out).
+Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out).
 
 - Operates in place on the project in the current directory: moves documentation into `<project>/wiki/` and `<project>/wiki/raw/`, removes emptied folders.
-- Does not use `meta/` or a skill output folder. Content is preserved; only locations change.
+- Does not use `data/` or a skill output folder. Content is preserved; only locations change.
 
 ## Workflow
 

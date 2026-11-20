@@ -2,7 +2,7 @@
 """Organize a project's documentation into wiki/ and wiki/raw/ (moves files in place).
 
 Declared I/O exception: operates on the project in the current directory
-(or --project DIR), not on meta/. Prints an audit trail of every move.
+(or --project DIR), not on data/. Prints an audit trail of every move.
 
   wiki/        markdown docs (folder structure preserved; socs/ flattened)
   wiki/raw/    static assets grouped by type

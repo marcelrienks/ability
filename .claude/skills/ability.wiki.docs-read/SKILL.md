@@ -12,7 +12,7 @@ Analyzes project documentation and distills it into a persistent context file th
 
 ## I/O exception
 
-Declared `io: external` (default rule is `meta/` in, `<repo root>/<skill-name>/` out).
+Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out).
 
 - Reads: the project in the current directory: root `README.md` and `.md` files under `wiki/`.
 - Writes: `<project>/.cel/context.md` (created automatically). No other files.

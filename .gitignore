@@ -1,8 +1,8 @@
 .DS_Store
 
 # Input: sensitive by default, only the placeholder is tracked
-meta/*
-!meta/.gitkeep
+data/*
+!data/.gitkeep
 
 # Credentials
 config.ini

@@ -12,7 +12,7 @@ Generates baseline project documentation by analyzing the codebase: structure, f
 
 ## I/O exception
 
-Declared `io: external` (default rule is `meta/` in, `<repo root>/<skill-name>/` out).
+Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out).
 
 - Reads: the whole project in the current directory (codebase, README, `wiki/`, `.cel/context.md`).
 - Writes: `<project>/wiki/*.md` (creating and updating files in place), plus whatever `docs-init`, `docs-read` and `docs-simplify` write when invoked below.

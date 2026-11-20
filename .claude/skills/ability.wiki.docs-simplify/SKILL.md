@@ -14,7 +14,7 @@ Audits all wiki markdown files, identifies inefficiencies and inconsistencies, p
 
 ## I/O exception
 
-Declared `io: external` (default rule is `meta/` in, `<repo root>/<skill-name>/` out).
+Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out).
 
 - Reads: the project in the current directory: all `.md` files in `wiki/` (not `wiki/raw/`), plus `.cel/context.md` and the codebase for context.
 - Writes: only markdown files in `<project>/wiki/` (consolidated, renamed, or deleted in place). `wiki/raw/` is never modified.

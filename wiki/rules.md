@@ -46,7 +46,7 @@ The folder name is the skill name, and it must equal `name:` in SKILL.md.
 | `name` | yes | Equals the folder name |
 | `description` | yes | First sentence is the help summary. Orchestrators start `Orchestrator:` |
 | `argument-hint` | no | Args shown by help, e.g. `"[refresh]"` |
-| `io` | no | `meta` (default) or `external`. See [io](io.md) |
+| `io` | no | `data` (default) or `external`. See [io](io.md) |
 | `install` | no | Where the skill may be deployed: `project`, `global`, or `global,project`. Absent = repo-only. See [deploy](deploy.md) |
 
 `io: external` skills must also declare `install`: a skill that works outside this repo has to be installable somewhere.
@@ -63,4 +63,4 @@ The folder name is the skill name, and it must equal `name:` in SKILL.md.
 - **Existing category**: name it `<category>-<function>`. It appears in help automatically.
 - **New category**: create `<category>-help` first. Add `*-run` at the second working skill. Shared code goes in a hidden `*-common`.
 - **New domain**: add `ability.<domain>.help` and `ability.<domain>.common`, then repeat the category rules.
-- Decide where it runs: from the clone only (default), or declare `install` (and `io: external` if it works outside `meta/`).
+- Decide where it runs: from the clone only (default), or declare `install` (and `io: external` if it works outside `data/`).

@@ -12,7 +12,7 @@ Orchestrator for the wiki docs group. Owns `ability.wiki.docs-init`, `ability.wi
 
 ## I/O exception
 
-Declared `io: external` (default rule is `meta/` in, `<repo root>/<skill-name>/` out). Every stage works in place on the project in the current directory: `wiki/`, `wiki/raw/`, `.cel/context.md`, and the root `README.md` (see each stage's own I/O exception).
+Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out). Every stage works in place on the project in the current directory: `wiki/`, `wiki/raw/`, `.cel/context.md`, and the root `README.md` (see each stage's own I/O exception).
 
 ## Args
 

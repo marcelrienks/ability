@@ -10,6 +10,6 @@ python3 -m unittest discover -s tests -v
 - orchestrator required at 2+ working skills, description starts `Orchestrator:`, covers every owned skill
 - `io: external` matches an `## I/O exception` section; `install` values are valid; external skills declare `install`; orchestrators' owned skills allow the orchestrator's scopes
 - documented `.claude/skills/...` paths exist (README and wiki), no `~/.claude/skills` in skills
-- `ability_paths.py` identical across domains and refuses paths outside `meta/`
+- `ability_paths.py` identical across domains and refuses paths outside `data/`
 
 `tests/test_deploy.py` deploys into temp dirs for each agent and scope and checks folder layout, frontmatter conversion, path rewriting, dependencies, `install.json` roots, and refusals.

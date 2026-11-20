@@ -2,7 +2,7 @@
 """MD5 change detection for the wiki context cache (.cel/context.md).
 
 Declared I/O exception: operates on the project in the current directory
-(or --project DIR), not on meta/.
+(or --project DIR), not on data/.
 
   hashes.py check   exit 0 if .cel/context.md exists and its recorded hashes match; 1 otherwise
   hashes.py write   record current hashes in a '## Hashes' section of .cel/context.md

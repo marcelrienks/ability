@@ -137,8 +137,8 @@ class IoDeclaration(unittest.TestCase):
             if is_common(folder.name):
                 continue
             meta = frontmatter(folder / "SKILL.md")
-            io = meta.get("io", "meta")
-            self.assertIn(io, ("meta", "external"), folder.name)
+            io = meta.get("io", "data")
+            self.assertIn(io, ("data", "external"), folder.name)
             has_section = "## I/O exception" in (folder / "SKILL.md").read_text()
             self.assertEqual(io == "external", has_section, f"{folder.name}: io: external <-> '## I/O exception' section must match")
 
@@ -196,16 +196,16 @@ class Contract(unittest.TestCase):
 
     def test_gitignore_covers_outputs_inputs_and_credentials(self):
         text = (ROOT / ".gitignore").read_text()
-        for pattern in ("/ability.*/", "meta/*", "config.ini", "!*.ini.example"):
+        for pattern in ("/ability.*/", "data/*", "config.ini", "!*.ini.example"):
             self.assertIn(pattern, text)
 
-    def test_ability_paths_refuses_outside_meta(self):
+    def test_ability_paths_refuses_outside_data(self):
         sys.path.insert(0, str(SKILLS / "ability.git.common/scripts"))
         import ability_paths
         for bad in ("../README.md", "/etc/passwd"):
             with self.assertRaises(ValueError):
                 ability_paths.input_path(bad)
-        self.assertEqual(ability_paths.input_path("."), (ROOT / "meta").resolve())
+        self.assertEqual(ability_paths.input_path("."), (ROOT / "data").resolve())
 
 
 if __name__ == "__main__":

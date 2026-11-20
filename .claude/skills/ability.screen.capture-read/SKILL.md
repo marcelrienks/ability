@@ -12,7 +12,7 @@ Finds the most recent screenshot from the system's default screenshot locations,
 
 ## I/O exception
 
-Declared `io: external` (default rule is `meta/` in, `<repo root>/<skill-name>/` out).
+Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out).
 
 - Reads: OS screenshot locations in `.claude/skills/ability.screen.capture-read/config/screenshot_dirs.json`, or the clipboard.
 - Writes: only the staged copy `<repo root>/ability.screen.capture-read/latest.<ext>`. Analysis works on this copy; the original is never modified.

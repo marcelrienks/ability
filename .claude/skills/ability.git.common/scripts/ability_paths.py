@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Shared path helper for ability skills. Enforces the I/O contract.
 
-Input:  read only from <root>/meta/. Anything outside is refused.
+Input:  read only from <root>/data/. Anything outside is refused.
 Output: write only to <root>/<skill-name>/. Created on demand.
 
 <root> is the repo root when running from a clone. For a deployed skill, the deploy
@@ -10,7 +10,7 @@ the project directory (project scope) or ~/.ability (global scope).
 
 CLI (prints an absolute path):
   ability_paths.py root
-  ability_paths.py input [REL]       path under meta/ (refuses escapes)
+  ability_paths.py input [REL]       path under data/ (refuses escapes)
   ability_paths.py output SKILL      output folder of SKILL (created)
   ability_paths.py upstream SKILL    output folder of an earlier stage (read only; exit 1 if absent)
   ability_paths.py config SKILL      SKILL/config inside the skills folder
@@ -34,15 +34,15 @@ def repo_root() -> Path:
     raise RuntimeError("repo root not found (no .claude/skills above this script)")
 
 
-def meta_dir() -> Path:
-    return repo_root() / "meta"
+def data_dir() -> Path:
+    return repo_root() / "data"
 
 
 def input_path(rel: str = ".") -> Path:
-    meta = meta_dir().resolve()
-    path = (meta / rel).resolve()
-    if path != meta and meta not in path.parents:
-        raise ValueError(f"input outside meta/ refused: {rel}")
+    data = data_dir().resolve()
+    path = (data / rel).resolve()
+    if path != data and data not in path.parents:
+        raise ValueError(f"input outside data/ refused: {rel}")
     return path
 
 

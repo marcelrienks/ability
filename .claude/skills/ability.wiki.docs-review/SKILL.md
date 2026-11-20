@@ -12,7 +12,7 @@ Three-phase review of the wiki and root README, identifying and resolving fallac
 
 ## I/O exception
 
-Declared `io: external` (default rule is `meta/` in, `<repo root>/<skill-name>/` out).
+Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out).
 
 - Reads: the project in the current directory: root `README.md` and `.md` files in `wiki/` (not `wiki/raw/`).
 - Writes: fixes applied in place to those same files, after each resolved issue.

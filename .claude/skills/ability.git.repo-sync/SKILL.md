@@ -12,9 +12,9 @@ Complete git synchronization workflow with change summarization and conflict res
 
 ## I/O exception
 
-Declared `io: external` (default rule is `meta/` in, `<repo root>/<skill-name>/` out).
+Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out).
 
-- Subject: the git repository in the current working directory. No input from `meta/`.
+- Subject: the git repository in the current working directory. No input from `data/`.
 - Writes: git history and remote (after confirmation, below). Sync log appended at `<repo root>/ability.git.repo-sync/sync.log` (timestamp, branch, commit hash or `none`, result). Resolve with `python3 .claude/skills/ability.git.common/scripts/ability_paths.py output ability.git.repo-sync`.
 
 ## Confirmation (external system)
