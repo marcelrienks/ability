@@ -1,0 +1,16 @@
+.DS_Store
+
+# Input: sensitive by default, only the placeholder is tracked
+meta/*
+!meta/.gitkeep
+
+# Credentials
+config.ini
+*.ini
+!*.ini.example
+
+# Skill outputs (<repo root>/<skill-name>/)
+/ability.*/
+
+__pycache__/
+*.pyc

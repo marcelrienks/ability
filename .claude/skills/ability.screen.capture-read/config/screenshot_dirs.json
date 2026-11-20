@@ -1,0 +1,10 @@
+{
+  "recency_minutes": 2,
+  "extensions": [".png", ".jpg", ".jpeg", ".gif"],
+  "dirs": {
+    "macos": ["~/Documents", "~/Desktop"],
+    "linux": ["~/Pictures/Screenshots"],
+    "wsl": ["/mnt/c/Users/*/Pictures/Screenshots", "~/Pictures/Screenshots"],
+    "windows": ["~/Pictures/Screenshots"]
+  }
+}
