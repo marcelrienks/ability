@@ -6,7 +6,8 @@ python3 -m unittest discover -s tests -v
 
 `tests/test_structure.py`:
 - folder names match the naming pattern and `name:` in SKILL.md; common folders have no SKILL.md
-- every domain and category has a help skill that uses the shared `help.py`
+- flat `ability.<domain>.<function>` only for single-function domains, and single-function domains must be flat
+- every domain has a help skill, and every category has a category help skill that uses the shared `help.py`
 - orchestrator required at 2+ working skills, description starts `Orchestrator:`, covers every owned skill
 - `io: external` matches an `## I/O exception` section; `install` values are valid; external skills declare `install`; orchestrators' owned skills allow the orchestrator's scopes
 - documented `.claude/skills/...` paths exist (README and wiki), no `~/.claude/skills` in skills

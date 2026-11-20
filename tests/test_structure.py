@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / ".claude" / "skills"
 
-NAME_RE = re.compile(r"^ability\.(help|[a-z0-9]+\.(help|common|[a-z0-9]+(-[a-z0-9]+)+))$")
+NAME_RE = re.compile(r"^ability\.(help|[a-z0-9]+\.([a-z0-9]+|[a-z0-9]+(-[a-z0-9]+)+))$")  # domain.function | domain.category-function
 DOC_REF_RE = re.compile(r"\.claude/skills/[A-Za-z0-9._/-]*")
 
 
@@ -34,6 +34,12 @@ def parse(name: str):
     """-> (domain, leaf) for ability.<domain>.<leaf>; (None, None) for ability.help."""
     parts = name.split(".")
     return (parts[1], parts[2]) if len(parts) == 3 else (None, None)
+
+
+def is_flat(name: str) -> bool:
+    """ability.<domain>.<function>: no category level."""
+    leaf = parse(name)[1]
+    return bool(leaf) and "-" not in leaf
 
 
 def is_common(name):
@@ -78,6 +84,27 @@ class Naming(unittest.TestCase):
             meta = frontmatter(skill_md)
             self.assertEqual(meta.get("name"), folder.name)
             self.assertTrue(meta.get("description"), f"{folder.name} missing description")
+
+
+class Flat(unittest.TestCase):
+    def domains(self):
+        out = defaultdict(list)
+        for folder in folders():
+            domain, _ = parse(folder.name)
+            if domain and working(folder.name):
+                out[domain].append(folder.name)
+        return out
+
+    def test_flat_only_for_single_function_domains(self):
+        for domain, names in self.domains().items():
+            flat = [n for n in names if is_flat(n)]
+            if flat:
+                self.assertEqual(len(names), 1, f"{domain}: flat skill {flat} but domain has several functions {names}")
+
+    def test_single_function_domains_are_flat(self):
+        for domain, names in self.domains().items():
+            if len(names) == 1:
+                self.assertTrue(is_flat(names[0]), f"{domain}: only one function, drop the category: {names[0]}")
 
 
 class Help(unittest.TestCase):

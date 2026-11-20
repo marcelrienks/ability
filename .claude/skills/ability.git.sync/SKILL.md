@@ -1,12 +1,12 @@
 ---
-name: ability.git.repo-sync
+name: ability.git.sync
 description: "Stage all changes, commit with a generated message, pull with merge-conflict resolution, and push to remote. Asks for confirmation before changing the remote unless `yes` is passed."
 io: external
 install: global,project
 argument-hint: "[yes]"
 ---
 
-# Git Repo Sync
+# Git Sync
 
 Complete git synchronization workflow with change summarization and conflict resolution. Operates on the git repository in the current working directory.
 
@@ -15,7 +15,7 @@ Complete git synchronization workflow with change summarization and conflict res
 Declared `io: external` (default rule is `data/` in, `<repo root>/<skill-name>/` out).
 
 - Subject: the git repository in the current working directory. No input from `data/`.
-- Writes: git history and remote (after confirmation, below). Sync log appended at `<repo root>/ability.git.repo-sync/sync.log` (timestamp, branch, commit hash or `none`, result). Resolve with `python3 .claude/skills/ability.git.common/scripts/ability_paths.py output ability.git.repo-sync`.
+- Writes: git history and remote (after confirmation, below). Sync log appended at `<repo root>/ability.git.sync/sync.log` (timestamp, branch, commit hash or `none`, result). Resolve with `python3 .claude/skills/ability.git.common/scripts/ability_paths.py output ability.git.sync`.
 
 ## Confirmation (external system)
 
@@ -66,4 +66,4 @@ This skill is strictly user-initiated.
 - Do NOT run it automatically after edits, code generation, or any other operation.
 - Do NOT treat one run as authorization for future git operations.
 - Do NOT bundle git operations into other workflows without explicit user consent.
-- Within one triggered run, the steps above proceed without further prompts (after confirmation). The next run needs a new explicit request: "run git sync", "sync changes", `/ability.git.repo-sync`, or similar.
+- Within one triggered run, the steps above proceed without further prompts (after confirmation). The next run needs a new explicit request: "run git sync", "sync changes", `/ability.git.sync`, or similar.

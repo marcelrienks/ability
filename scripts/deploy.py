@@ -7,12 +7,12 @@ no `install` key means repo-only). This script installs the eligible ones.
 
   deploy.py --agent claude  --scope project --project ~/work/myapp
   deploy.py --agent copilot --scope global
-  deploy.py --agent agents  --scope global --skill ability.screen.capture-read
+  deploy.py --agent agents  --scope global --skill ability.screen.read
   deploy.py --agent claude  --scope global --uninstall
 
 What lands in the target skills folder, per skill:
   - the skill folder (frontmatter converted to the agent's convention)
-  - dependencies: ability.help, the domain help + common, the category help, and every
+  - dependencies: ability.help, the domain help + common, the category help (if any), and every
     skill owned by an orchestrator
   - install.json in each *.common folder, telling ability_paths.py where its root is
 Repo-relative `.claude/skills/` references and `<repo root>` in the docs are rewritten to
@@ -73,8 +73,10 @@ def dependencies(name: str, names: list) -> set:
     domain, leaf = parts(name)
     out = {name, "ability.help"}
     if domain:
+        out |= {f"ability.{domain}.help", f"ability.{domain}.common"}
+    if domain and "-" in leaf:  # category form; flat domain.function skills have no category
         category = leaf.split("-")[0]
-        out |= {f"ability.{domain}.help", f"ability.{domain}.common", f"ability.{domain}.{category}-help"}
+        out |= {f"ability.{domain}.{category}-help"}
         out |= {n for n in names if n.startswith(f"ability.{domain}.{category}-") and n.endswith("-common")}
         if leaf.endswith("-run"):  # orchestrator owns every working skill in its category
             out |= {n for n in names if parts(n)[0] == domain and parts(n)[1].startswith(f"{category}-")

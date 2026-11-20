@@ -2,11 +2,11 @@
 
 | Domain | Category | Skill | `io` | `install` |
 |--------|----------|-------|------|-----------|
-| `git` | `repo` | `ability.git.repo-sync` | external | global,project |
-| `screen` | `capture` | `ability.screen.capture-read` | external | global |
+| `git` | (flat) | `ability.git.sync` | external | global,project |
+| `screen` | (flat) | `ability.screen.read` | external | global |
 | `wiki` | `docs` | `ability.wiki.docs-run` (orchestrator), `-init`, `-read`, `-write`, `-simplify`, `-review` | external | project |
 
-Run `/ability.help` for args and summaries.
+`git` and `screen` have a single function each, so they use the flat `ability.<domain>.<function>` form. Run `/ability.help` for args and summaries.
 
 ## Wiki docs pipeline
 

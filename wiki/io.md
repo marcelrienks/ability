@@ -22,6 +22,6 @@ Tests fail if the declaration and the section disagree. Undeclared skills follow
 
 | Skill | Reads | Writes |
 |-------|-------|--------|
-| `ability.screen.capture-read` | OS screenshot folders / clipboard | staged copy in its own output folder |
-| `ability.git.repo-sync` | the git repo in the working directory | git history and remote (after confirmation); sync log in its output folder |
+| `ability.screen.read` | OS screenshot folders / clipboard | staged copy in its own output folder |
+| `ability.git.sync` | the git repo in the working directory | git history and remote (after confirmation); sync log in its output folder |
 | `ability.wiki.docs-*` | the project's `README.md`, `wiki/`, codebase | `wiki/`, `wiki/raw/`, `.cel/context.md` in place |

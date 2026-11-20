@@ -15,7 +15,7 @@ import sys
 import time
 from pathlib import Path
 
-SKILL = "ability.screen.capture-read"
+SKILL = "ability.screen.read"
 SKILLS = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(SKILLS / "ability.screen.common" / "scripts"))
 import ability_paths  # noqa: E402

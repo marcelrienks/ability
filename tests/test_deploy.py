@@ -39,9 +39,9 @@ class ProjectScope(unittest.TestCase):
     def test_claude_layout_and_frontmatter(self):
         skills = self.run_deploy("claude", ".claude/skills")
         for name in ("ability.wiki.docs-run", "ability.wiki.docs-init", "ability.wiki.common",
-                     "ability.wiki.docs-help", "ability.wiki.help", "ability.help", "ability.git.repo-sync"):
+                     "ability.wiki.docs-help", "ability.wiki.help", "ability.help", "ability.git.sync"):
             self.assertTrue((skills / name).is_dir(), name)
-        self.assertFalse((skills / "ability.screen.capture-read").exists(), "global-only skill deployed to project")
+        self.assertFalse((skills / "ability.screen.read").exists(), "global-only skill deployed to project")
         meta = frontmatter(skills / "ability.wiki.docs-read" / "SKILL.md")
         self.assertEqual(set(meta), {"name", "description", "argument-hint"})
 
@@ -79,7 +79,7 @@ class ProjectScope(unittest.TestCase):
         out = subprocess.run([sys.executable, str(skills / "ability.help/scripts/help.py")],
                              capture_output=True, text=True, check=True).stdout
         self.assertIn("ability.wiki.docs-init", out)
-        self.assertNotIn("capture-read", out)
+        self.assertNotIn("ability.screen.read", out)
 
     def test_redeploy_replaces_and_uninstall_removes(self):
         skills = self.run_deploy("claude", ".claude/skills")
@@ -104,10 +104,10 @@ class GlobalScope(unittest.TestCase):
         result = deploy("--agent", "claude", "--scope", "global", "--home", str(self.home))
         self.assertEqual(result.returncode, 0, result.stderr)
         skills = self.home / ".claude" / "skills"
-        self.assertTrue((skills / "ability.screen.capture-read").is_dir())
+        self.assertTrue((skills / "ability.screen.read").is_dir())
         self.assertFalse((skills / "ability.wiki.docs-init").exists(), "project-only skill deployed globally")
-        text = (skills / "ability.screen.capture-read" / "SKILL.md").read_text()
-        self.assertIn("~/.claude/skills/ability.screen.capture-read/scripts/find_screenshot.py", text)
+        text = (skills / "ability.screen.read" / "SKILL.md").read_text()
+        self.assertIn("~/.claude/skills/ability.screen.read/scripts/find_screenshot.py", text)
         self.assertIn("~/.ability/", text)
         marker = json.loads((skills / "ability.screen.common" / "install.json").read_text())
         self.assertEqual(Path(marker["root"]).resolve(), (self.home / ".ability").resolve())
@@ -115,7 +115,7 @@ class GlobalScope(unittest.TestCase):
     def test_global_copilot_folder(self):
         result = deploy("--agent", "copilot", "--scope", "global", "--home", str(self.home))
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertTrue((self.home / ".copilot" / "skills" / "ability.git.repo-sync").is_dir())
+        self.assertTrue((self.home / ".copilot" / "skills" / "ability.git.sync").is_dir())
 
     def test_refuses_undeclared_scope(self):
         result = deploy("--agent", "claude", "--scope", "global", "--home", str(self.home),

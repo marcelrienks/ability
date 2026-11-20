@@ -13,14 +13,14 @@ Skills run directly from a clone of this repo (`.claude/skills/` is picked up by
 | `global` | Installable into the user's global skills (e.g. screenshot reading) |
 | `global,project` | Either |
 
-Current declarations: `ability.screen.capture-read` global; `ability.git.repo-sync` global,project; all `ability.wiki.docs-*` project.
+Current declarations: `ability.screen.read` global; `ability.git.sync` global,project; all `ability.wiki.docs-*` project.
 
 ## Usage
 
 ```bash
 python3 scripts/deploy.py --agent claude  --scope project --project ~/work/myapp
 python3 scripts/deploy.py --agent copilot --scope global
-python3 scripts/deploy.py --agent agents  --scope global --skill ability.screen.capture-read
+python3 scripts/deploy.py --agent agents  --scope global --skill ability.screen.read
 python3 scripts/deploy.py --agent claude  --scope global --uninstall
 ```
 
@@ -49,7 +49,7 @@ Repo-only keys (`io`, `install`) are always stripped. Agents without an argument
 ## What a deploy does
 
 1. Picks the skills (declared eligible, or `--skill`).
-2. Adds dependencies: `ability.help`, the domain help and `*.common`, the category help, and for an orchestrator every skill it owns. A dependency that doesn't allow the scope is an error.
+2. Adds dependencies: `ability.help`, the domain help and `*.common`, the category help (domains with categories only), and for an orchestrator every skill it owns. A dependency that doesn't allow the scope is an error.
 3. Copies each folder (replacing any existing copy) and converts SKILL.md frontmatter.
 4. Rewrites docs: `.claude/skills/` becomes the target's skills folder (project: relative, e.g. `.github/skills/`; global: `~/.copilot/skills/`), and `<repo root>` becomes `<project root>` or `~/.ability`.
 5. Writes `install.json` into each `*.common` folder so `ability_paths.py` finds its root. Skill outputs then land in `<project>/<skill-name>/` or `~/.ability/<skill-name>/`.
