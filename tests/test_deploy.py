@@ -92,6 +92,62 @@ class ProjectScope(unittest.TestCase):
         self.assertEqual([p.name for p in skills.iterdir()], ["keep-me"])
 
 
+class Uninstall(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.home = Path(self.tmp.name)
+        self.skills = self.home / ".claude" / "skills"
+        self.args = ("--agent", "claude", "--scope", "global", "--home", str(self.home))
+        self.assertEqual(deploy(*self.args).returncode, 0)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_selective_removes_skill_and_unneeded_deps_only(self):
+        result = deploy(*self.args, "--uninstall", "--skill", "ability.screen.read")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        for gone in ("ability.screen.read", "ability.screen.help", "ability.screen.common"):
+            self.assertFalse((self.skills / gone).exists(), gone)
+        for kept in ("ability.git.sync", "ability.git.help", "ability.git.common", "ability.help"):
+            self.assertTrue((self.skills / kept).is_dir(), kept)
+
+    def test_full_uninstall_keeps_foreign_folders(self):
+        (self.skills / "other-skill").mkdir()
+        self.assertEqual(deploy(*self.args, "--uninstall").returncode, 0)
+        self.assertEqual([p.name for p in self.skills.iterdir()], ["other-skill"])
+
+    def test_refuses_to_break_orchestrator(self):
+        project = self.home / "proj"
+        project.mkdir()
+        proj_args = ("--agent", "claude", "--scope", "project", "--project", str(project))
+        self.assertEqual(deploy(*proj_args).returncode, 0)
+        result = deploy(*proj_args, "--uninstall", "--skill", "ability.wiki.docs-init")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("ability.wiki.docs-run", result.stderr)
+        self.assertTrue((project / ".claude/skills/ability.wiki.docs-init").is_dir())
+
+    def test_not_installed_is_an_error(self):
+        result = deploy(*self.args, "--uninstall", "--skill", "ability.wiki.docs-init")
+        self.assertNotEqual(result.returncode, 0)
+
+    def test_output_kept_unless_purged(self):
+        out = self.home / ".ability" / "ability.screen.read"
+        out.mkdir(parents=True)
+        (out / "latest.png").write_text("x")
+        self.assertEqual(deploy(*self.args, "--uninstall", "--skill", "ability.screen.read").returncode, 0)
+        self.assertTrue(out.is_dir(), "output must survive a plain uninstall")
+        self.assertEqual(deploy(*self.args).returncode, 0)
+        self.assertEqual(deploy(*self.args, "--uninstall", "--purge-output").returncode, 0)
+        self.assertFalse((self.home / ".ability").exists(), "purge removes outputs and the emptied ~/.ability")
+
+    def test_dry_run_removes_nothing(self):
+        deploy(*self.args, "--uninstall", "--dry-run")
+        self.assertTrue((self.skills / "ability.screen.read").is_dir())
+
+    def test_purge_requires_uninstall(self):
+        self.assertNotEqual(deploy(*self.args, "--purge-output").returncode, 0)
+
+
 class GlobalScope(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()

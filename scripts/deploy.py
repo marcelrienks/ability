@@ -9,12 +9,18 @@ no `install` key means repo-only). This script installs the eligible ones.
   deploy.py --agent copilot --scope global
   deploy.py --agent agents  --scope global --skill ability.screen.read
   deploy.py --agent claude  --scope global --uninstall
+  deploy.py --agent claude  --scope project --project ~/work/myapp --uninstall --skill ability.wiki.docs-run
 
 What lands in the target skills folder, per skill:
   - the skill folder (frontmatter converted to the agent's convention)
   - dependencies: ability.help, the domain help + common, the category help (if any), and every
     skill owned by an orchestrator
   - install.json in each *.common folder, telling ability_paths.py where its root is
+Uninstall (`--uninstall`) removes every installed ability.* skill from the target, or only the
+`--skill` ones plus dependencies nothing else still needs. It refuses to break a remaining skill.
+Skill output folders (<root>/<skill-name>/) are kept unless `--purge-output` is given.
+Folders that are not ability.* are never touched.
+
 Repo-relative `.claude/skills/` references and `<repo root>` in the docs are rewritten to
 the target's real locations.
 """
@@ -102,15 +108,60 @@ def rewrite_paths(text: str, skills_display: str, root_display: str) -> str:
     return text.replace("<repo root>", root_display)
 
 
+def uninstall(args, target: Path, root: Path, names: list) -> int:
+    installed = sorted(p.name for p in target.glob("ability.*") if p.is_dir()) if target.is_dir() else []
+    if args.skill:
+        missing = [n for n in args.skill if n not in installed]
+        if missing:
+            print(f"not installed in {target}: {', '.join(missing)}", file=sys.stderr)
+            return 1
+        requested = set(args.skill)
+        remaining = {n for n in installed if n not in requested and not is_helper(n)}
+        for name in sorted(remaining):
+            broken = dependencies(name, names) & requested
+            if broken:
+                print(f"{name} still needs {', '.join(sorted(broken))}: uninstall {name} too", file=sys.stderr)
+                return 1
+        needed = set().union(*(dependencies(n, names) for n in remaining)) if remaining else set()
+        removal = requested | {d for r in requested for d in dependencies(r, names) if d in installed and d not in needed}
+    else:
+        removal = set(installed)
+
+    removal &= set(installed)
+    if not removal:
+        print(f"nothing to uninstall in {target}")
+        return 0
+    print(f"agent={args.agent} scope={args.scope} target={target}")
+    for name in sorted(removal):
+        print(f"  remove {name}")
+        if not args.dry_run:
+            shutil.rmtree(target / name)
+    if args.purge_output:
+        for name in sorted(removal):
+            out = root / name
+            if out.is_dir():
+                print(f"  purge output {out}")
+                if not args.dry_run:
+                    shutil.rmtree(out)
+        if not args.dry_run and args.scope == "global" and root.is_dir() and not any(root.iterdir()):
+            root.rmdir()
+    print(f"uninstalled {len(removal)} skill folders")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--agent", required=True, choices=sorted(AGENTS))
     parser.add_argument("--scope", required=True, choices=sorted(VALID_INSTALL))
     parser.add_argument("--project", help="target project directory (required for --scope project)")
     parser.add_argument("--home", help="home directory for --scope global (default: your home)")
-    parser.add_argument("--skill", action="append", help="deploy only this skill (repeatable); default: all eligible")
-    parser.add_argument("--clean", action="store_true", help="remove every ability.* skill from the target first")
-    parser.add_argument("--uninstall", action="store_true", help="remove every ability.* skill from the target and stop")
+    parser.add_argument("--skill", action="append",
+                        help="deploy (or with --uninstall, remove) only this skill (repeatable); default: all")
+    parser.add_argument("--clean", action="store_true", help="remove every ability.* skill from the target before deploying")
+    parser.add_argument("--uninstall", action="store_true",
+                        help="remove installed ability.* skills (all, or the --skill ones plus unneeded dependencies) and stop")
+    parser.add_argument("--purge-output", action="store_true",
+                        help="with --uninstall: also delete the removed skills' output folders under the install root")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     agent = AGENTS[args.agent]
@@ -130,15 +181,17 @@ def main() -> int:
     if target.resolve() == SRC.resolve():
         parser.error("target is the source skills folder")
 
-    if args.clean or args.uninstall:
+    names = sorted(p.name for p in SRC.iterdir() if p.is_dir())
+    if args.purge_output and not args.uninstall:
+        parser.error("--purge-output requires --uninstall")
+    if args.uninstall:
+        return uninstall(args, target, root, names)
+    if args.clean:
         for old in sorted(target.glob("ability.*")) if target.is_dir() else []:
             print(f"remove {old}")
             if not args.dry_run:
                 shutil.rmtree(old)
-        if args.uninstall:
-            return 0
 
-    names = sorted(p.name for p in SRC.iterdir() if p.is_dir())
     eligible = [n for n in names if not is_helper(n) and args.scope in info(n)["scopes"]]
     chosen = args.skill or eligible
     for name in chosen:

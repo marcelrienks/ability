@@ -13,4 +13,4 @@ python3 -m unittest discover -s tests -v
 - documented `.claude/skills/...` paths exist (README and wiki), no `~/.claude/skills` in skills
 - `ability_paths.py` identical across domains and refuses paths outside `data/`
 
-`tests/test_deploy.py` deploys into temp dirs for each agent and scope and checks folder layout, frontmatter conversion, path rewriting, dependencies, `install.json` roots, and refusals.
+`tests/test_deploy.py` deploys into temp dirs for each agent and scope and checks folder layout, frontmatter conversion, path rewriting, dependencies, `install.json` roots, and refusals. Uninstall tests cover selective removal with dependency pruning, foreign folders left alone, refusing to break an orchestrator, output kept unless `--purge-output`, and dry run.
