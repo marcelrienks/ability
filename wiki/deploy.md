@@ -13,7 +13,7 @@ Skills run directly from a clone of this repo (`.claude/skills/` is picked up by
 | `global` | Installable into the user's global skills (e.g. screenshot reading) |
 | `global,project` | Either |
 
-Current declarations: `ability.screen.read` global; `ability.git.sync` global,project; all `ability.wiki.docs-*` project.
+Current declarations: `ability.screen.read` global; `ability.git.sync` global,project; `ability.stocks.trend` global,project; all `ability.wiki.docs-*` project.
 
 ## Usage
 
