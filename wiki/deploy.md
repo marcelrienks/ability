@@ -13,7 +13,7 @@ Skills run directly from a clone of this repo (`.claude/skills/` is picked up by
 | `global` | Installable into the user's global skills (e.g. screenshot reading) |
 | `global,project` | Either |
 
-Current declarations: `ability.screen.read` global; `ability.git.sync` global,project; `ability.stocks.trend` global,project; all `ability.wiki.docs-*` project.
+A skill must declare the requested scope to be deployed, even when named with `--skill`; otherwise deploy refuses with an error. Current declarations are in the `install` column of [skills](skills.md), the single source of truth. `python3 scripts/deploy.py --scope global --agent claude --dry-run` lists what a global deploy would install.
 
 ## Usage
 
@@ -36,7 +36,22 @@ python3 scripts/deploy.py --agent claude  --scope project --project ~/work/myapp
 | `--purge-output` | With `--uninstall`: also delete the removed skills' output folders |
 | `--dry-run` | Print the plan only |
 
-A skill that doesn't declare the requested scope is refused with an error.
+A skill that doesn't declare the requested scope is refused with an error. `--home` applies to global scope only. `--clean` removes only `ability.*` skill folders in the target (never output folders, never other skills) and is ignored with `--uninstall`.
+
+### Global install, specific skills
+
+```bash
+# one skill for one agent (its dependencies come along)
+python3 scripts/deploy.py --agent claude --scope global --skill ability.screen.read
+# several skills, another agent
+python3 scripts/deploy.py --agent copilot --scope global --skill ability.git.sync --skill ability.stocks.trend
+# every global-eligible skill, all three agents
+for a in claude copilot agents; do python3 scripts/deploy.py --agent $a --scope global; done
+```
+
+Deploys are additive: installing one skill leaves other installed `ability.*` skills alone, and only replaces the folders it deploys. Use `--clean` for an exact set.
+
+Global and project installs are separate folders, so both can exist for the same agent. Which one the agent uses when both are present is the agent's own precedence rule, not this repo's.
 
 ## Agent conventions
 
@@ -46,7 +61,12 @@ A skill that doesn't declare the requested scope is refused with an error.
 | `copilot` | `<project>/.github/skills/` | `~/.copilot/skills/` | `name`, `description` |
 | `agents` | `<project>/.agents/skills/` | `~/.agents/skills/` | `name`, `description` |
 
-Repo-only keys (`io`, `install`) are always stripped. Agents without an argument-hint key get the usage appended to the description (`Usage: /<name> [args]`). To support another agent, add an entry to `AGENTS` in `scripts/deploy.py` and a case to `tests/test_deploy.py`.
+Repo-only keys (`io`, `install`) are always stripped. Agents without an argument-hint key get the usage appended to the description (`Usage: /<name> [args]`). ### Adding an agent
+
+1. Add an entry to `AGENTS` in `scripts/deploy.py`: `project` folder, `global` folder, `keys` (frontmatter keys it understands) and `usage_in_description` (true if it has no argument-hint key).
+2. Add a case to `tests/test_deploy.py`.
+3. Add a row to the table above.
+The `--agent` choices are generated from `AGENTS`.
 
 ## What a deploy does
 

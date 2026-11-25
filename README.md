@@ -12,9 +12,9 @@ In short: naming convention + orchestrator/stage pipeline + `data/`-in / skill-f
 # run from the clone: open Claude Code here, then
 /ability.help
 
-# install into another project, or globally
+# install into a project, or globally (agents: claude, copilot, agents)
 python3 scripts/deploy.py --agent claude --scope project --project ~/work/myapp
-python3 scripts/deploy.py --agent copilot --scope global
+python3 scripts/deploy.py --agent copilot --scope global --skill ability.git.sync
 
 # tests
 python3 -m unittest discover -s tests -v
@@ -35,6 +35,6 @@ wiki/                          the ruleset and expectations
 
 - [rules](wiki/rules.md): naming, orchestrators, help, frontmatter, adding skills
 - [io](wiki/io.md): `data/` in / skill folder out, and the `io: external` exception
-- [deploy](wiki/deploy.md): `install:` declaration, project vs. global, agent conventions
+- [deploy](wiki/deploy.md): `install:` declaration, project vs. global, agent conventions, uninstall
 - [skills](wiki/skills.md): current skills, the wiki pipeline and finance budget summary
 - [tests](wiki/tests.md): what the tests enforce
