@@ -36,5 +36,5 @@ wiki/                          the ruleset and expectations
 - [rules](wiki/rules.md): naming, orchestrators, help, frontmatter, adding skills
 - [io](wiki/io.md): `data/` in / skill folder out, and the `io: external` exception
 - [deploy](wiki/deploy.md): `install:` declaration, project vs. global, agent conventions
-- [skills](wiki/skills.md): current skills and the wiki pipeline
+- [skills](wiki/skills.md): current skills, the wiki pipeline and finance budget summary
 - [tests](wiki/tests.md): what the tests enforce

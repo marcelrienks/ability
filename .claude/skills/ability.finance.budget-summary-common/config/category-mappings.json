@@ -1,0 +1,95 @@
+{
+  "tier1Categories": {
+    "Groceries": [
+      "woolworths",
+      "checkers",
+      "flm",
+      "visfabriek",
+      "terbodore",
+      "chicken",
+      "pnp",
+      "hyper"
+    ],
+    "Fuel": [
+      "zoo park motors",
+      "shell",
+      "total",
+      "engen",
+      "bp"
+    ],
+    "Medical": [
+      "clicks",
+      "dis-chem",
+      "dischem",
+      "holistic",
+      "casualty",
+      "dental",
+      "dentist",
+      "doctor",
+      "dr. ",
+      "dr ",
+      "drs ",
+      "schnetler corbett",
+      "pharmacy",
+      "Mediclinic",
+      "Medi"
+    ],
+    "Extras": [
+      "linkedin",
+      "youtube",
+      "netflix",
+      "microsoft",
+      "www.f1.com",
+      "claude",
+      "google",
+      "amazon web",
+      "github",
+      "medium",
+      "APPLE"
+    ],
+    "Other": [
+      "takealo",
+      "pizza",
+      "brights",
+      "rocomamas",
+      "vida",
+      "boathouse"
+    ]
+  },
+  "tier2Patterns": [
+    {
+      "pattern": "payfast",
+      "groupName": "PAYFAST Transactions",
+      "matchType": "contains"
+    },
+    {
+      "pattern": "paygate",
+      "groupName": "PayGate Transactions",
+      "matchType": "contains"
+    },
+    {
+      "pattern": "#int pymt fee",
+      "groupName": "International Payment Fees",
+      "matchType": "contains"
+    },
+    {
+      "pattern": "1bb",
+      "groupName": "1BB Transactions",
+      "matchType": "contains"
+    }
+  ],
+  "categoryOrder": [
+    "Groceries",
+    "Fuel",
+    "Medical",
+    "Extras",
+    "Credit",
+    "Other"
+  ],
+  "settings": {
+    "minimumSalaryAmount": 10000,
+    "caseInsensitive": true,
+    "preserveDescriptionFormatting": true,
+    "firstMatchWins": true
+  }
+}

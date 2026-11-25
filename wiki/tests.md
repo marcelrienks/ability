@@ -16,3 +16,5 @@ python3 -m unittest discover -s tests -v
 `tests/test_deploy.py` deploys into temp dirs for each agent and scope and checks folder layout, frontmatter conversion, path rewriting, dependencies, `install.json` roots, and refusals. Uninstall tests cover selective removal with dependency pruning, foreign folders left alone, refusing to break an orchestrator, output kept unless `--purge-output`, and dry run.
 
 `tests/test_trend.py` covers the stocks trend logic offline: signals and verdicts, price-point selection, ticker extraction (xlsx, header and fallback), exchange lookup and failures.
+
+`tests/test_budget.py` covers the finance budget-summary logic on synthetic data: parsing, salary rules, categorising, reconciliation, the workbook, and a full three-stage run in a temp root (`ABILITY_BASE_DIR`, tests only).
